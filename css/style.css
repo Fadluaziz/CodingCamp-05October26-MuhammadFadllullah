@@ -1,0 +1,747 @@
+/* ============================================================
+   style.css — Personal Dashboard
+   Sections:
+   1. CSS Variables (themes)
+   2. Reset & Base
+   3. Layout
+   4. Header
+   5. Greeting Card
+   6. Timer Card
+   7. To-Do Card
+   8. Quick Links Card
+   9. Shared Components (buttons, inputs, messages)
+   10. Footer
+   11. Responsive
+   ============================================================ */
+
+/* ── 1. CSS Variables ── */
+:root {
+  /* Colors — light theme */
+  --color-bg:         #f0f2f5;
+  --color-surface:    #ffffff;
+  --color-surface-2:  #f7f8fa;
+  --color-border:     #e2e6ea;
+  --color-text:       #1a1d23;
+  --color-text-muted: #6b7280;
+  --color-primary:    #4f46e5;
+  --color-primary-h:  #4338ca;
+  --color-secondary:  #6b7280;
+  --color-secondary-h:#4b5563;
+  --color-danger:     #ef4444;
+  --color-danger-h:   #dc2626;
+  --color-success:    #10b981;
+  --color-done-text:  #9ca3af;
+  --color-shadow:     rgba(0, 0, 0, 0.08);
+  --color-shadow-lg:  rgba(0, 0, 0, 0.14);
+  --color-sort-active:#4f46e5;
+  --color-sort-active-bg: #ede9fe;
+  --color-notif-bg:   #d1fae5;
+  --color-notif-text: #065f46;
+  --color-error-bg:   #fee2e2;
+  --color-error-text: #991b1b;
+
+  /* Spacing */
+  --space-xs:  4px;
+  --space-sm:  8px;
+  --space-md:  16px;
+  --space-lg:  24px;
+  --space-xl:  32px;
+  --space-2xl: 48px;
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+
+  /* Typography */
+  --font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-size-xs:  0.75rem;
+  --font-size-sm:  0.875rem;
+  --font-size-md:  1rem;
+  --font-size-lg:  1.125rem;
+  --font-size-xl:  1.5rem;
+  --font-size-2xl: 2rem;
+  --font-size-3xl: 3rem;
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-std:  0.25s ease;
+}
+
+/* Dark theme overrides */
+[data-theme="dark"] {
+  --color-bg:         #0f0f1a;
+  --color-surface:    #1a1a2e;
+  --color-surface-2:  #16213e;
+  --color-border:     #2d2d4e;
+  --color-text:       #e8eaf0;
+  --color-text-muted: #8b8fa8;
+  --color-primary:    #7c73f0;
+  --color-primary-h:  #6b62e8;
+  --color-secondary:  #4b5563;
+  --color-secondary-h:#6b7280;
+  --color-danger:     #f87171;
+  --color-danger-h:   #ef4444;
+  --color-success:    #34d399;
+  --color-done-text:  #6b7280;
+  --color-shadow:     rgba(0, 0, 0, 0.35);
+  --color-shadow-lg:  rgba(0, 0, 0, 0.55);
+  --color-sort-active:#7c73f0;
+  --color-sort-active-bg: #2d2b5e;
+  --color-notif-bg:   #064e3b;
+  --color-notif-text: #6ee7b7;
+  --color-error-bg:   #450a0a;
+  --color-error-text: #fca5a5;
+}
+
+/* ── 2. Reset & Base ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  line-height: 1.6;
+  transition: background-color var(--transition-std), color var(--transition-std);
+  min-height: 100vh;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  outline: none;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+input {
+  font-family: inherit;
+}
+
+input:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+}
+
+/* ── 3. Layout ── */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-lg);
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-lg) var(--space-md) var(--space-2xl);
+}
+
+@media (min-width: 700px) {
+  .main-grid {
+    grid-template-columns: repeat(2, 1fr);
+    padding: var(--space-lg) var(--space-lg) var(--space-2xl);
+  }
+  /* Greeting spans full width */
+  .card-greeting {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .main-grid {
+    grid-template-columns: repeat(3, 1fr);
+    padding: var(--space-xl) var(--space-xl) var(--space-2xl);
+  }
+  .card-greeting {
+    grid-column: 1 / -1;
+  }
+  /* Timer on its own, Todo spans 2 cols, Links 1 col */
+  .card-timer {
+    grid-column: 1 / 2;
+  }
+  .card-todo {
+    grid-column: 2 / 4;
+  }
+  .card-links {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Card base */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  box-shadow: 0 2px 12px var(--color-shadow);
+  transition: background-color var(--transition-std), border-color var(--transition-std), box-shadow var(--transition-std);
+}
+
+.section-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: var(--space-lg);
+}
+
+/* ── 4. Header ── */
+.site-header {
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: background-color var(--transition-std), border-color var(--transition-std);
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-sm) var(--space-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-text);
+  letter-spacing: -0.02em;
+}
+
+/* ── 5. Greeting Card ── */
+.card-greeting {
+  text-align: center;
+  padding: var(--space-2xl) var(--space-xl);
+}
+
+.greeting-time {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--color-primary);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  margin-bottom: var(--space-sm);
+}
+
+.greeting-date {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-md);
+}
+
+.greeting-text {
+  font-size: var(--font-size-2xl);
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: var(--space-md);
+}
+
+.name-editor {
+  margin-top: var(--space-sm);
+}
+
+.name-input-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  margin-top: var(--space-sm);
+}
+
+.name-input-wrap.hidden,
+.hidden {
+  display: none !important;
+}
+
+/* ── 6. Timer Card ── */
+.timer-display {
+  font-size: var(--font-size-3xl);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  color: var(--color-primary);
+  letter-spacing: 0.06em;
+  margin-bottom: var(--space-lg);
+  line-height: 1;
+}
+
+.timer-controls {
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: var(--space-lg);
+}
+
+.timer-notification {
+  background: var(--color-notif-bg);
+  color: var(--color-notif-text);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
+  text-align: center;
+  font-weight: 500;
+  margin-bottom: var(--space-lg);
+  transition: opacity var(--transition-std);
+}
+
+.timer-custom {
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-md);
+  margin-top: var(--space-sm);
+}
+
+.custom-duration-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-xs);
+}
+
+/* ── 7. To-Do Card ── */
+.todo-add-row {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xs);
+}
+
+.todo-add-row .input-text {
+  flex: 1;
+}
+
+.sort-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin: var(--space-md) 0;
+  flex-wrap: wrap;
+}
+
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* Single task item */
+.todo-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.todo-item:hover {
+  border-color: var(--color-primary);
+}
+
+.todo-checkbox {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin-top: 3px;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+.todo-text-wrap {
+  flex: 1;
+  min-width: 0;
+}
+
+.todo-text {
+  word-break: break-word;
+  font-size: var(--font-size-md);
+  color: var(--color-text);
+  transition: color var(--transition-fast);
+}
+
+.todo-item.done .todo-text {
+  text-decoration: line-through;
+  color: var(--color-done-text);
+}
+
+.todo-item.done {
+  opacity: 0.7;
+}
+
+.todo-edit-input {
+  width: 100%;
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: var(--font-size-md);
+  font-family: inherit;
+}
+
+.todo-edit-error {
+  font-size: var(--font-size-xs);
+  color: var(--color-danger);
+  margin-top: var(--space-xs);
+}
+
+.todo-item-actions {
+  display: flex;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+  align-items: flex-start;
+}
+
+/* ── 8. Quick Links Card ── */
+.links-add-form {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-lg);
+}
+
+.links-add-form .input-text {
+  flex: 1;
+  min-width: 140px;
+}
+
+.links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--space-md);
+}
+
+.link-card {
+  position: relative;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  text-align: center;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+  overflow: hidden;
+}
+
+.link-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 16px var(--color-shadow-lg);
+  transform: translateY(-2px);
+}
+
+.link-anchor {
+  display: block;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--color-text);
+  word-break: break-word;
+  padding-top: var(--space-xs);
+  text-decoration: none;
+}
+
+.link-anchor:hover {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.link-favicon {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: block;
+  margin: 0 auto var(--space-xs);
+  object-fit: contain;
+}
+
+.link-delete-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 0.7rem;
+  line-height: 1;
+  padding: 2px 4px;
+  border-radius: var(--radius-sm);
+  opacity: 0;
+  transition: opacity var(--transition-fast), color var(--transition-fast);
+}
+
+.link-card:hover .link-delete-btn {
+  opacity: 1;
+}
+
+.link-delete-btn:hover {
+  color: var(--color-danger);
+}
+
+/* ── 9. Shared Components ── */
+
+/* Buttons */
+.btn-primary {
+  background: var(--color-primary);
+  color: #fff;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-h);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-secondary {
+  background: var(--color-surface-2);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.btn-secondary:hover {
+  background: var(--color-border);
+  transform: translateY(-1px);
+}
+
+.btn-secondary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-sm {
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--font-size-xs);
+}
+
+.btn-icon {
+  background: transparent;
+  color: var(--color-text);
+  font-size: var(--font-size-xl);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast);
+  line-height: 1;
+}
+
+.btn-icon:hover {
+  background: var(--color-surface-2);
+}
+
+.btn-text {
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.btn-text:hover {
+  color: var(--color-primary);
+  background: var(--color-surface-2);
+}
+
+.btn-danger-icon {
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  padding: 2px 5px;
+  border-radius: var(--radius-sm);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+  line-height: 1;
+}
+
+.btn-danger-icon:hover {
+  color: var(--color-danger);
+  background: var(--color-error-bg);
+}
+
+.btn-edit-icon {
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  padding: 2px 5px;
+  border-radius: var(--radius-sm);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+  line-height: 1;
+}
+
+.btn-edit-icon:hover {
+  color: var(--color-primary);
+  background: var(--color-sort-active-bg);
+}
+
+/* Sort buttons */
+.btn-sort {
+  background: var(--color-surface-2);
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.btn-sort:hover {
+  border-color: var(--color-sort-active);
+  color: var(--color-sort-active);
+}
+
+.btn-sort.active {
+  background: var(--color-sort-active-bg);
+  color: var(--color-sort-active);
+  border-color: var(--color-sort-active);
+  font-weight: 600;
+}
+
+/* Inputs */
+.input-text {
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  transition: border-color var(--transition-fast);
+  width: 100%;
+}
+
+.input-text:focus {
+  border-color: var(--color-primary);
+  outline: none;
+}
+
+.input-inline {
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  width: 200px;
+  max-width: 100%;
+}
+
+.input-inline:focus {
+  border-color: var(--color-primary);
+  outline: none;
+}
+
+.input-number {
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  width: 80px;
+}
+
+.input-number:focus {
+  border-color: var(--color-primary);
+  outline: none;
+}
+
+/* Labels */
+.label-sm {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+/* Messages */
+.error-msg {
+  background: var(--color-error-bg);
+  color: var(--color-error-text);
+  border-radius: var(--radius-sm);
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--font-size-xs);
+  margin-bottom: var(--space-sm);
+}
+
+.empty-msg {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  text-align: center;
+  padding: var(--space-lg) 0;
+}
+
+/* ── 10. Footer ── */
+.site-footer {
+  text-align: center;
+  padding: var(--space-md);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  border-top: 1px solid var(--color-border);
+}
+
+/* ── 11. Responsive tweaks ── */
+@media (max-width: 480px) {
+  .greeting-time {
+    font-size: var(--font-size-2xl);
+  }
+  .greeting-text {
+    font-size: var(--font-size-xl);
+  }
+  .timer-display {
+    font-size: var(--font-size-2xl);
+  }
+  .card {
+    padding: var(--space-lg);
+  }
+  .todo-add-row {
+    flex-direction: column;
+  }
+  .links-add-form {
+    flex-direction: column;
+  }
+}

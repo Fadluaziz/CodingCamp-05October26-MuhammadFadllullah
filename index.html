@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personal Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <!-- Apply saved theme immediately to prevent flash -->
+  <script>
+    (function () {
+      var theme = localStorage.getItem('dashboard_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- ========== HEADER ========== -->
+  <header class="site-header">
+    <div class="header-inner">
+      <span class="logo">📋 Dashboard</span>
+      <button id="theme-toggle" class="btn-icon" aria-label="Toggle light/dark mode" title="Toggle theme">
+        <span id="theme-icon">🌙</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ========== MAIN CONTENT ========== -->
+  <main class="main-grid">
+
+    <!-- ── GREETING SECTION ── -->
+    <section class="card card-greeting" aria-label="Greeting and time">
+      <div class="greeting-time" id="current-time">00:00:00</div>
+      <div class="greeting-date" id="current-date"></div>
+      <div class="greeting-text" id="greeting-text">Good Morning, Friend!</div>
+
+      <!-- Edit name area -->
+      <div class="name-editor">
+        <span id="name-display-wrap">
+          <button id="edit-name-btn" class="btn-text" aria-label="Edit your name">✏️ Edit Name</button>
+        </span>
+        <div id="name-input-wrap" class="name-input-wrap hidden">
+          <input type="text" id="name-input" class="input-inline" placeholder="Your name…" maxlength="40" aria-label="Your name" />
+          <button id="save-name-btn" class="btn-primary btn-sm">Save</button>
+          <button id="cancel-name-btn" class="btn-secondary btn-sm">Cancel</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── FOCUS TIMER SECTION ── -->
+    <section class="card card-timer" aria-label="Focus timer">
+      <h2 class="section-title">🍅 Focus Timer</h2>
+
+      <div class="timer-display" id="timer-display">25:00</div>
+
+      <div class="timer-controls">
+        <button id="timer-start" class="btn-primary">▶ Start</button>
+        <button id="timer-stop" class="btn-secondary" disabled>⏸ Stop</button>
+        <button id="timer-reset" class="btn-secondary">↺ Reset</button>
+      </div>
+
+      <!-- Finish notification banner (hidden by default) -->
+      <div id="timer-notification" class="timer-notification hidden" role="alert">
+        🎉 Time's up! Great focus session!
+      </div>
+
+      <!-- Custom duration -->
+      <div class="timer-custom">
+        <label for="custom-minutes" class="label-sm">Custom duration (minutes):</label>
+        <div class="custom-duration-row">
+          <input type="number" id="custom-minutes" class="input-number" min="1" max="120" value="25" aria-label="Custom timer minutes" />
+          <button id="set-duration-btn" class="btn-secondary btn-sm">Set</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TO-DO LIST SECTION ── -->
+    <section class="card card-todo" aria-label="To-do list">
+      <h2 class="section-title">✅ To-Do List</h2>
+
+      <!-- Add task row -->
+      <div class="todo-add-row">
+        <input type="text" id="todo-input" class="input-text" placeholder="New task…" aria-label="New task text" maxlength="200" />
+        <button id="todo-add-btn" class="btn-primary">Add</button>
+      </div>
+      <div id="todo-error" class="error-msg hidden" role="alert"></div>
+
+      <!-- Sort controls -->
+      <div class="sort-controls" role="group" aria-label="Sort tasks">
+        <span class="label-sm">Sort:</span>
+        <button class="btn-sort active" data-sort="original">Original</button>
+        <button class="btn-sort" data-sort="az">A–Z</button>
+        <button class="btn-sort" data-sort="status">Status</button>
+      </div>
+
+      <!-- Task list -->
+      <ul id="todo-list" class="todo-list" aria-label="Task list"></ul>
+      <p id="todo-empty" class="empty-msg">No tasks yet — add something above!</p>
+    </section>
+
+    <!-- ── QUICK LINKS SECTION ── -->
+    <section class="card card-links" aria-label="Quick links">
+      <h2 class="section-title">🔗 Quick Links</h2>
+
+      <!-- Add link form -->
+      <div class="links-add-form">
+        <input type="text" id="link-name-input" class="input-text" placeholder="Link name…" aria-label="Link name" maxlength="60" />
+        <input type="url" id="link-url-input" class="input-text" placeholder="https://example.com" aria-label="Link URL" maxlength="500" />
+        <button id="link-add-btn" class="btn-primary">Add Link</button>
+      </div>
+
+      <!-- Links grid -->
+      <div id="links-grid" class="links-grid" aria-label="Saved links"></div>
+      <p id="links-empty" class="empty-msg">No links yet — add your favorites!</p>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Personal Dashboard &mdash; Muhammad Fadllullah</p>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
